@@ -1,6 +1,6 @@
 <?php
 /**
- *  Copyright 2015 Reverb Technologies, Inc.
+ *  Copyright 2015 SmartBear Software
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -24,7 +24,32 @@ namespace SwaggerClient;
 
 class UserApi {
 
-  function __construct($apiClient) {
+  function __construct($apiClient = null) {
+    if (null === $apiClient) {
+      if (Configuration::$apiClient === null) {
+        Configuration::$apiClient = new ApiClient(); // create a new API client if not present
+        $this->apiClient = Configuration::$apiClient;
+      }
+      else
+        $this->apiClient = Configuration::$apiClient; // use the default one
+    } else {
+      $this->apiClient = $apiClient; // use the one provided by the user
+    }
+  }
+
+  private $apiClient; // instance of the ApiClient
+
+  /**
+   * get the API client
+   */
+  public function getApiClient() {
+    return $this->apiClient;
+  }
+
+  /**
+   * set the API client
+   */
+  public function setApiClient($apiClient) {
     $this->apiClient = $apiClient;
   }
 
@@ -38,6 +63,7 @@ class UserApi {
    * @return void
    */
    public function createUser($body) {
+      
 
       // parse inputs
       $resourcePath = "/user";
@@ -47,12 +73,11 @@ class UserApi {
       $queryParams = array();
       $headerParams = array();
       $formParams = array();
-      $_header_accept = 'application/json, application/xml';
-      if ($_header_accept !== '') {
+      $_header_accept = $this->apiClient->selectHeaderAccept(array('application/json', 'application/xml'));
+      if (!is_null($_header_accept)) {
         $headerParams['Accept'] = $_header_accept;
       }
-      $_header_content_type = array();
-      $headerParams['Content-Type'] = count($_header_content_type) > 0 ? $_header_content_type[0] : 'application/json';
+      $headerParams['Content-Type'] = $this->apiClient->selectHeaderContentType(array());
 
       
       
@@ -67,17 +92,18 @@ class UserApi {
       // for model (json/xml)
       if (isset($_tempBody)) {
         $httpBody = $_tempBody; // $_tempBody is the method argument, if present
+      } else if (count($formParams) > 0) {
+        // for HTTP post (form)
+        $httpBody = $formParams;
       }
-      
-      // for HTTP post (form)
-      if (strpos($headerParams['Content-Type'], "application/x-www-form-urlencoded") !== FALSE) {
-        $httpBody = http_build_query($formParams);
-      }
+
+      // authentication setting, if any
+      $authSettings = array();
 
       // make the API Call
       $response = $this->apiClient->callAPI($resourcePath, $method,
                                             $queryParams, $httpBody,
-                                            $headerParams);
+                                            $headerParams, $authSettings);
 
       
   }
@@ -91,6 +117,7 @@ class UserApi {
    * @return void
    */
    public function createUsersWithArrayInput($body) {
+      
 
       // parse inputs
       $resourcePath = "/user/createWithArray";
@@ -100,12 +127,11 @@ class UserApi {
       $queryParams = array();
       $headerParams = array();
       $formParams = array();
-      $_header_accept = 'application/json, application/xml';
-      if ($_header_accept !== '') {
+      $_header_accept = $this->apiClient->selectHeaderAccept(array('application/json', 'application/xml'));
+      if (!is_null($_header_accept)) {
         $headerParams['Accept'] = $_header_accept;
       }
-      $_header_content_type = array();
-      $headerParams['Content-Type'] = count($_header_content_type) > 0 ? $_header_content_type[0] : 'application/json';
+      $headerParams['Content-Type'] = $this->apiClient->selectHeaderContentType(array());
 
       
       
@@ -120,17 +146,18 @@ class UserApi {
       // for model (json/xml)
       if (isset($_tempBody)) {
         $httpBody = $_tempBody; // $_tempBody is the method argument, if present
+      } else if (count($formParams) > 0) {
+        // for HTTP post (form)
+        $httpBody = $formParams;
       }
-      
-      // for HTTP post (form)
-      if (strpos($headerParams['Content-Type'], "application/x-www-form-urlencoded") !== FALSE) {
-        $httpBody = http_build_query($formParams);
-      }
+
+      // authentication setting, if any
+      $authSettings = array();
 
       // make the API Call
       $response = $this->apiClient->callAPI($resourcePath, $method,
                                             $queryParams, $httpBody,
-                                            $headerParams);
+                                            $headerParams, $authSettings);
 
       
   }
@@ -144,6 +171,7 @@ class UserApi {
    * @return void
    */
    public function createUsersWithListInput($body) {
+      
 
       // parse inputs
       $resourcePath = "/user/createWithList";
@@ -153,12 +181,11 @@ class UserApi {
       $queryParams = array();
       $headerParams = array();
       $formParams = array();
-      $_header_accept = 'application/json, application/xml';
-      if ($_header_accept !== '') {
+      $_header_accept = $this->apiClient->selectHeaderAccept(array('application/json', 'application/xml'));
+      if (!is_null($_header_accept)) {
         $headerParams['Accept'] = $_header_accept;
       }
-      $_header_content_type = array();
-      $headerParams['Content-Type'] = count($_header_content_type) > 0 ? $_header_content_type[0] : 'application/json';
+      $headerParams['Content-Type'] = $this->apiClient->selectHeaderContentType(array());
 
       
       
@@ -173,17 +200,18 @@ class UserApi {
       // for model (json/xml)
       if (isset($_tempBody)) {
         $httpBody = $_tempBody; // $_tempBody is the method argument, if present
+      } else if (count($formParams) > 0) {
+        // for HTTP post (form)
+        $httpBody = $formParams;
       }
-      
-      // for HTTP post (form)
-      if (strpos($headerParams['Content-Type'], "application/x-www-form-urlencoded") !== FALSE) {
-        $httpBody = http_build_query($formParams);
-      }
+
+      // authentication setting, if any
+      $authSettings = array();
 
       // make the API Call
       $response = $this->apiClient->callAPI($resourcePath, $method,
                                             $queryParams, $httpBody,
-                                            $headerParams);
+                                            $headerParams, $authSettings);
 
       
   }
@@ -198,6 +226,7 @@ class UserApi {
    * @return string
    */
    public function loginUser($username, $password) {
+      
 
       // parse inputs
       $resourcePath = "/user/login";
@@ -207,12 +236,11 @@ class UserApi {
       $queryParams = array();
       $headerParams = array();
       $formParams = array();
-      $_header_accept = 'application/json, application/xml';
-      if ($_header_accept !== '') {
+      $_header_accept = $this->apiClient->selectHeaderAccept(array('application/json', 'application/xml'));
+      if (!is_null($_header_accept)) {
         $headerParams['Accept'] = $_header_accept;
       }
-      $_header_content_type = array();
-      $headerParams['Content-Type'] = count($_header_content_type) > 0 ? $_header_content_type[0] : 'application/json';
+      $headerParams['Content-Type'] = $this->apiClient->selectHeaderContentType(array());
 
       // query params
       if($username !== null) {
@@ -229,25 +257,25 @@ class UserApi {
       // for model (json/xml)
       if (isset($_tempBody)) {
         $httpBody = $_tempBody; // $_tempBody is the method argument, if present
+      } else if (count($formParams) > 0) {
+        // for HTTP post (form)
+        $httpBody = $formParams;
       }
-      
-      // for HTTP post (form)
-      if (strpos($headerParams['Content-Type'], "application/x-www-form-urlencoded") !== FALSE) {
-        $httpBody = http_build_query($formParams);
-      }
+
+      // authentication setting, if any
+      $authSettings = array();
 
       // make the API Call
       $response = $this->apiClient->callAPI($resourcePath, $method,
                                             $queryParams, $httpBody,
-                                            $headerParams);
+                                            $headerParams, $authSettings);
 
       if(! $response) {
         return null;
       }
 
-  		$responseObject = $this->apiClient->deserialize($response,
-  		                                                'string');
-  		return $responseObject;
+      $responseObject = $this->apiClient->deserialize($response,'string');
+      return $responseObject;
   }
   
   /**
@@ -258,6 +286,7 @@ class UserApi {
    * @return void
    */
    public function logoutUser() {
+      
 
       // parse inputs
       $resourcePath = "/user/logout";
@@ -267,12 +296,11 @@ class UserApi {
       $queryParams = array();
       $headerParams = array();
       $formParams = array();
-      $_header_accept = 'application/json, application/xml';
-      if ($_header_accept !== '') {
+      $_header_accept = $this->apiClient->selectHeaderAccept(array('application/json', 'application/xml'));
+      if (!is_null($_header_accept)) {
         $headerParams['Accept'] = $_header_accept;
       }
-      $_header_content_type = array();
-      $headerParams['Content-Type'] = count($_header_content_type) > 0 ? $_header_content_type[0] : 'application/json';
+      $headerParams['Content-Type'] = $this->apiClient->selectHeaderContentType(array());
 
       
       
@@ -283,17 +311,18 @@ class UserApi {
       // for model (json/xml)
       if (isset($_tempBody)) {
         $httpBody = $_tempBody; // $_tempBody is the method argument, if present
+      } else if (count($formParams) > 0) {
+        // for HTTP post (form)
+        $httpBody = $formParams;
       }
-      
-      // for HTTP post (form)
-      if (strpos($headerParams['Content-Type'], "application/x-www-form-urlencoded") !== FALSE) {
-        $httpBody = http_build_query($formParams);
-      }
+
+      // authentication setting, if any
+      $authSettings = array();
 
       // make the API Call
       $response = $this->apiClient->callAPI($resourcePath, $method,
                                             $queryParams, $httpBody,
-                                            $headerParams);
+                                            $headerParams, $authSettings);
 
       
   }
@@ -307,6 +336,12 @@ class UserApi {
    * @return User
    */
    public function getUserByName($username) {
+      
+      // verify the required parameter 'username' is set
+      if ($username === null) {
+        throw new \InvalidArgumentException('Missing the required parameter $username when calling getUserByName');
+      }
+      
 
       // parse inputs
       $resourcePath = "/user/{username}";
@@ -316,12 +351,11 @@ class UserApi {
       $queryParams = array();
       $headerParams = array();
       $formParams = array();
-      $_header_accept = 'application/json, application/xml';
-      if ($_header_accept !== '') {
+      $_header_accept = $this->apiClient->selectHeaderAccept(array('application/json', 'application/xml'));
+      if (!is_null($_header_accept)) {
         $headerParams['Accept'] = $_header_accept;
       }
-      $_header_content_type = array();
-      $headerParams['Content-Type'] = count($_header_content_type) > 0 ? $_header_content_type[0] : 'application/json';
+      $headerParams['Content-Type'] = $this->apiClient->selectHeaderContentType(array());
 
       
       
@@ -336,25 +370,25 @@ class UserApi {
       // for model (json/xml)
       if (isset($_tempBody)) {
         $httpBody = $_tempBody; // $_tempBody is the method argument, if present
+      } else if (count($formParams) > 0) {
+        // for HTTP post (form)
+        $httpBody = $formParams;
       }
-      
-      // for HTTP post (form)
-      if (strpos($headerParams['Content-Type'], "application/x-www-form-urlencoded") !== FALSE) {
-        $httpBody = http_build_query($formParams);
-      }
+
+      // authentication setting, if any
+      $authSettings = array();
 
       // make the API Call
       $response = $this->apiClient->callAPI($resourcePath, $method,
                                             $queryParams, $httpBody,
-                                            $headerParams);
+                                            $headerParams, $authSettings);
 
       if(! $response) {
         return null;
       }
 
-  		$responseObject = $this->apiClient->deserialize($response,
-  		                                                'User');
-  		return $responseObject;
+      $responseObject = $this->apiClient->deserialize($response,'User');
+      return $responseObject;
   }
   
   /**
@@ -367,6 +401,12 @@ class UserApi {
    * @return void
    */
    public function updateUser($username, $body) {
+      
+      // verify the required parameter 'username' is set
+      if ($username === null) {
+        throw new \InvalidArgumentException('Missing the required parameter $username when calling updateUser');
+      }
+      
 
       // parse inputs
       $resourcePath = "/user/{username}";
@@ -376,12 +416,11 @@ class UserApi {
       $queryParams = array();
       $headerParams = array();
       $formParams = array();
-      $_header_accept = 'application/json, application/xml';
-      if ($_header_accept !== '') {
+      $_header_accept = $this->apiClient->selectHeaderAccept(array('application/json', 'application/xml'));
+      if (!is_null($_header_accept)) {
         $headerParams['Accept'] = $_header_accept;
       }
-      $_header_content_type = array();
-      $headerParams['Content-Type'] = count($_header_content_type) > 0 ? $_header_content_type[0] : 'application/json';
+      $headerParams['Content-Type'] = $this->apiClient->selectHeaderContentType(array());
 
       
       
@@ -400,17 +439,18 @@ class UserApi {
       // for model (json/xml)
       if (isset($_tempBody)) {
         $httpBody = $_tempBody; // $_tempBody is the method argument, if present
+      } else if (count($formParams) > 0) {
+        // for HTTP post (form)
+        $httpBody = $formParams;
       }
-      
-      // for HTTP post (form)
-      if (strpos($headerParams['Content-Type'], "application/x-www-form-urlencoded") !== FALSE) {
-        $httpBody = http_build_query($formParams);
-      }
+
+      // authentication setting, if any
+      $authSettings = array();
 
       // make the API Call
       $response = $this->apiClient->callAPI($resourcePath, $method,
                                             $queryParams, $httpBody,
-                                            $headerParams);
+                                            $headerParams, $authSettings);
 
       
   }
@@ -424,6 +464,12 @@ class UserApi {
    * @return void
    */
    public function deleteUser($username) {
+      
+      // verify the required parameter 'username' is set
+      if ($username === null) {
+        throw new \InvalidArgumentException('Missing the required parameter $username when calling deleteUser');
+      }
+      
 
       // parse inputs
       $resourcePath = "/user/{username}";
@@ -433,12 +479,11 @@ class UserApi {
       $queryParams = array();
       $headerParams = array();
       $formParams = array();
-      $_header_accept = 'application/json, application/xml';
-      if ($_header_accept !== '') {
+      $_header_accept = $this->apiClient->selectHeaderAccept(array('application/json', 'application/xml'));
+      if (!is_null($_header_accept)) {
         $headerParams['Accept'] = $_header_accept;
       }
-      $_header_content_type = array();
-      $headerParams['Content-Type'] = count($_header_content_type) > 0 ? $_header_content_type[0] : 'application/json';
+      $headerParams['Content-Type'] = $this->apiClient->selectHeaderContentType(array());
 
       
       
@@ -453,17 +498,18 @@ class UserApi {
       // for model (json/xml)
       if (isset($_tempBody)) {
         $httpBody = $_tempBody; // $_tempBody is the method argument, if present
+      } else if (count($formParams) > 0) {
+        // for HTTP post (form)
+        $httpBody = $formParams;
       }
-      
-      // for HTTP post (form)
-      if (strpos($headerParams['Content-Type'], "application/x-www-form-urlencoded") !== FALSE) {
-        $httpBody = http_build_query($formParams);
-      }
+
+      // authentication setting, if any
+      $authSettings = array();
 
       // make the API Call
       $response = $this->apiClient->callAPI($resourcePath, $method,
                                             $queryParams, $httpBody,
-                                            $headerParams);
+                                            $headerParams, $authSettings);
 
       
   }
